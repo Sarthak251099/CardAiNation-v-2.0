@@ -1,0 +1,29 @@
+{% extends "layoutDoc.html" %}
+{% block content %}
+<br><br><br><br>
+<table  id="example" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Patient</th>
+            <th>Symptoms</th>
+            <th>Disease</th>
+            <th>Prescription</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{record.id}}</td>
+            <td>{{record.date.split(" ")[0]}}</td>
+            <td>{{record.patient.username}}</td>
+            <td>{{record.symptoms}}</td>
+            <td>{{record.disease}}</td>
+            <td>{{record.prescription}}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+{% endblock content %}

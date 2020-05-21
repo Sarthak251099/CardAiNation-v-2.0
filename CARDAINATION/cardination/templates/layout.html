@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  {% if records %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
+    <script>
+        $(document).ready(function() {
+        $('#example').DataTable();
+        } 
+        );
+    </script>
+    
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+  
+    {% else %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+  {% endif %}
+
+    {% block head %}{% endblock %}
+    {% if title %}
+        <title>Cardination - {{ title }}</title>
+    {% else %}
+        <title>Cardination</title>
+    {% endif %}
+
+</head>
+<body>
+        <header class="site-header">
+                <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="background-color: rgb(3, 26, 61);">
+                  <div class="container">
+                    <a class="navbar-brand mr-4" href="/">CARDINATION</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarToggle">
+                      <div class="navbar-nav mr-auto">
+                        
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('patient.viewRecordsPat') }}" class="nav-item nav-link">View Records</a>
+                        <a href="{{ url_for('patient.accountPat') }}" class="nav-item nav-link">Account Details</a>
+                        <a href="{{ url_for('patient.addRecordPat') }}" class="nav-item nav-link">Add Record</a>
+                        <a href="{{ url_for('patient.logout') }}" class="nav-item nav-link">Sign Out</a>
+
+                        {% else %}
+                        <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
+                        <a class="nav-item nav-link" href="{{ url_for('patient.loginPatient') }}">Patient</a>
+                        <a class="nav-item nav-link" href="{{ url_for('doctor.loginDoc') }}">Doctor</a>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </header>
+              
+                <div class="container">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{ category }} col-sm-8">
+                            {{ message }}
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                    {% block content %}{% endblock %}
+
+                </div>
+  {% if records %}
+  {% else %}
+              
+                <div id="chatwindow">
+                  <div id="head">
+                      <i class="fas fa-fire" id="logo"></i>
+                      &nbsp;Blibo
+                  </div>
+                  <div style="height:2px;">
+          
+                  </div>
+                  <div id="contentwindow">
+                      <div class="message"><span class="sender">Hey there! I am your personalized medical assistance. You can all me Blibo.</span></div>
+                      <div class="reply"><span class="reciever">What are some of the your main features that you offer?</span></div>
+                      <div class="message"><span class="sender">For trying few of my mostly used features, type: <br><br><ul style="margin: 0;"><li>Add record</li><li>Order "medicine name"</li><li>Diagnose me for diabetes</li><li>Run Diagnosis</li><li>Fill up this form</li></ul><br></span></div>
+                  </div>
+                  <div>
+          
+                      <input type="text" id="chatinput" name="message">
+                      <span id="micro" onclick="listenme()"><i class="fas fa-microphone" id="send"></i></span>
+                  </div>
+              </div>
+              
+              <i class="fas fa-comments" id="chatbt"></i>
+
+              <script>
+
+                $(document).ready(function(){
+                    $("#chatbt").click(function(){
+                    $("#chatwindow").slideToggle();
+                });
+            });
+            
+            var SpeechRecognition = window.webkitSpeechRecognition;
+            var recognition = new SpeechRecognition();
+            var textbox = $('#chatinput');
+            var content = '';
+            var fillform = false;
+            var counter = 0;
+            recognition.onresult = function(event) {
+              var current = event.resultIndex;
+              var transcript = event.results[current][0].transcript;
+              content += transcript;
+                textbox.val(content);
+                submit();
+                content ='';
+            };
+            
+            function listenme(){
+              if (content.length) {
+                content += ' ';
+              }
+              recognition.start();
+            };
+            
+            function submit(){
+                var text = document.getElementById("chatinput").value;
+                if(text.toLowerCase() != "add record" && text){
+                    $("#contentwindow").append("<div class='reply'><span class='reciever'>"+text+"</span></div>"); 
+                    if (fillform==true && text.toLowerCase()=="cancel"){
+                      fillform = false;
+                      counter = 0;
+                      onClickPlay('Auto filling form aborted successfully.');
+                    $("#contentwindow").append("<div class='message'><span class='sender'>Auto filling form aborted successfully.</span></div>"); 
+                    document.getElementById("chatinput").value="";
+                    return;
+                    }
+                    if (fillform==true){
+                      if(counter == 0){
+                        document.getElementById('doctor').value = text;
+                        counter = counter+1;
+                        onClickPlay('Give date for this record.');
+                    $("#contentwindow").append("<div class='message'><span class='sender'>Give date for this record.</span></div>"); 
+                    var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+
+                      }
+                      else if(counter==1){
+                        document.getElementById('date').value = text;
+                        counter = counter+1;
+                        onClickPlay('Give symptoms faced.');
+                        $("#contentwindow").append("<div class='message'><span class='sender'>Give symptoms faced.</span></div>"); 
+                        var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+
+                      }
+                      else if(counter==2){
+                        document.getElementById('symptoms').value = text;
+                        counter = counter+1;
+                        onClickPlay('What is the name of disease?');
+                        $("#contentwindow").append("<div class='message'><span class='sender'>What is the name of disease?</span></div>"); 
+                        var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+
+                      }
+                      else if(counter==3){
+                        document.getElementById('disease').value = text;
+                        counter = counter+1;
+                        onClickPlay('Give the prescription.');
+                        $("#contentwindow").append("<div class='message'><span class='sender'>Give the prescription.</span></div>"); 
+                        var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+
+                      }
+                      else if(counter==4){
+                        document.getElementById('prescription').value = text;
+                        counter = counter+1;
+                        onClickPlay('Give additional information.');
+                        
+                        $("#contentwindow").append("<div class='message'><span class='sender'>Give additional information.</span></div>"); 
+                        var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+
+                      }
+                      else if(counter==5){
+                        document.getElementById('additional_info').value = text;
+                        counter = 0;
+                        fillform = false;
+                        onClickPlay('Check the filled details and say yes to add record and cancel to abort.');
+                        $("#contentwindow").append("<div class='message'><span class='sender'>Check the filled details and say yes to add record</span></div>"); 
+                        var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+                      }
+                      return;
+                    }
+                    
+                    
+                    var URL="http://localhost:5000/response?message="+text;
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                      if (this.readyState == 4 && this.status == 200) {
+                    onClickPlay(this.responseText);
+                    $("#contentwindow").append("<div class='message'><span class='sender'>"+this.responseText+"</span></div>"); 
+                    var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById('submit').click();
+                    return;
+                      }
+                      }
+
+                      xhttp.open("GET", URL, true);
+                      xhttp.send();
+                    document.getElementById("chatinput").value="";
+                    
+                    }
+                  else if(text.toLowerCase() == "add record"){
+                    // if(window.location.href!="{{url_for('patient.addRecordPat')}}"){
+                    // window.location.href = "{{url_for('patient.addRecordPat')}}";}
+                    $("#contentwindow").append("<div class='reply'><span class='reciever'>Add Record</span></div>"); 
+                    fillform = true;
+                    counter = 0;
+                    onClickPlay("Give doctor's username. Say cancel if you want to abort autofilling.");
+                    $("#contentwindow").append("<div class='message'><span class='sender'>Give doctor's username.</span></div>"); 
+                    var objDiv = document.getElementById("contentwindow");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                    document.getElementById("chatinput").value="";
+return;
+                  }
+              }
+                document.getElementById("chatinput").addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) {
+                event.preventDefault();
+                submit();
+                }
+                });
+                
+            
+                $(document).mousedown(function(e){
+                let chatWindow = $("#chatwindow");
+              let chatBt = $("#chatbt");
+                if(!chatWindow.is(e.target) && !chatBt.is(e.target)  && chatWindow.has(e.target).length == 0){
+                    chatWindow.slideUp();
+                }
+            });
+
+            function onClickPlay(response){
+            if ('speechSynthesis' in window) with(speechSynthesis) {
+              utterance = new SpeechSynthesisUtterance(response); 
+              utterance.rate = 1.4;
+              speak(utterance);
+            }}
+            
+                </script>
+  {% endif %}
+              
+                {% if records %}
+                {% else %}
+                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+                {% endif %}
+
+</body>
+</html>

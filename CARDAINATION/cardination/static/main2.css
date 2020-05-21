@@ -1,0 +1,175 @@
+body {
+    background: #fafafa;
+    color: #333333;
+    margin-top: 5rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #444444;
+  }
+  
+  .bg-steel {
+    background-color: rgb(3, 26, 61);
+  }
+  
+  .site-header .navbar-nav .nav-link {
+    color: #cbd5db;
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+  
+  a.article-title:hover {
+    color: #428bca;
+    text-decoration: none;
+  }
+  
+  .article-content {
+    white-space: pre-line;
+  }
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+  }
+  
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+  
+  #add:hover{
+    background: rgb(3, 26, 61);
+    color: white;
+  }
+  #view:hover{
+    background: rgb(3, 26, 61);
+    color: white;
+  }
+  #chatbt{
+    color:rgb(3, 26, 61);
+    font-size: 40px;
+    position: fixed;
+    bottom: 30px;
+    right: 100px;
+    cursor: pointer;
+  }
+  #chatwindow{
+    height: 456px;
+    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png") ;
+    position: fixed;
+    right: 50px;
+    bottom: 100px;
+    z-index: 9;
+    border-radius: 10px;
+    padding: 0;
+    width: 280px;
+    display: none;
+  }
+  #head{
+    border-radius: 10px;
+    font-family: sans-serif;
+    background-color: rgb(3, 26, 61);
+    color: azure;
+    padding: 10px 10px;
+  }
+  #logo{
+    color: azure;
+  }
+  #contentwindow{
+    height:80%;
+    overflow-y: auto;
+  }
+  #contentwindow::-webkit-scrollbar {
+    display: none;
+  }
+  #chatinput{
+    display: inline-block;
+    border: none;
+    padding: 6px;
+    margin-left: 6px;
+    border-radius: 10px;
+    margin-top: 5px;
+    width: 234px;
+  }
+  #chatinput:focus{
+    outline:none;
+  }
+  .message{
+    padding: 5px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .reply{
+    padding: 5px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+  }
+  .sender{
+    max-width: 200px;
+    padding: 10px;
+    display:inline-block;
+    background: white;
+    border-radius: 10px;
+    text-align: left;
+  }
+  .reciever{
+    max-width: 200px;
+    padding: 10px;
+    display:inline-block;
+    background: rgb(3, 26, 61) ;
+    border-radius: 10px;
+    color: white;
+    text-align: left;
+  }
+  #micro{
+    background: white;
+    padding: 8px 10.5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  #flashmsg{
+    width: 100px;
+  }
